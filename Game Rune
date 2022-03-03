@@ -1,0 +1,110 @@
+"""
+Atticus Hempel
+Curse Thing 
+March 1st, 2022
+"""
+from random import *
+
+def main():
+    """
+    This runs everything
+    first part creates the rune list
+    bunch of accumulators and creates a blank code for user
+    prints introduction
+    the while loop does everything, and tracks rounds
+    """
+    rune_list = ["ansuz", "isaz", "sowilo", "hagalaz", "algix", "ehwaz", "naudiz"]
+    code = [""]*4
+    print_introduction()
+    trials = 1
+    win = 0
+    robot = generate_code(rune_list, code)
+    while trials < 14 and win != 4:
+        print("=======")
+        print("Turn" , trials)
+        print("Please enter four legal runes. Your choices are: ")
+        print_runes(rune_list)
+        user = get_guess(rune_list)
+        print()
+        print("You guessed:")
+        print_runes(user)
+        win = check_guess(robot, user)
+        print(win , "/ 4 correct")
+        trials += 1
+    if int(win) == 4:
+        print()
+        print("nice job, the wizard lost!")
+    if int(win) != 4:
+        print()
+        print("uh, oh. Looks like the wizard won this one!")
+
+def print_runes(llist):
+    """
+    prints out inputted code nicely
+    """
+    good_list = "| "
+    for i in range(len(llist)):
+        good_list = good_list + llist[i] + " | "
+    print(good_list)
+def get_rune(runes, number):
+    """
+    This gets the runes from the user
+    and makes sure that the user input is a possible value
+    """
+    rune = input("Enter rune %d: " % (number))
+    while rune not in runes:
+        print("try again!")
+        rune = input("Enter rune %d: " % (number))
+    legal = rune
+    return legal
+def get_guess(runes):
+    """
+    This creates the string of the users runes
+    """
+    w = get_rune(runes, 1)
+    x = get_rune(runes, 2)
+    y = get_rune(runes, 3)
+    z = get_rune(runes, 4)
+    guess = [w, x, y, z]
+    return guess
+def generate_code(runes, code):
+    """
+    This generates the computer's code (wizards lock)
+    NO repeats
+    """
+    for i in range(4):
+        randomrune = choice(runes)
+        while randomrune in code:
+            randomrune = choice(runes)
+        code[i] = randomrune
+    return code
+def check_guess(code, guess):
+    """
+    This tracks how many of the users guesses were correct
+    and feeds that number back so it can be used in main
+    """
+    win = 0
+    for i in range(len(guess)):
+        if code[i] == guess[i]:
+            win = win + 1
+    return win
+def print_introduction():
+    """
+    Introductions to the game 
+    """
+    print("Welcome to Curse Breaker!")
+    print()
+    print("The object of the game for the player is to guess the" \
+            "rune sequence, e.g. sowilo isaz hagalaz ansuz. for our game" \
+            " we'll use 4 runes in the sequence, and we'll say each run can " \
+            "only show up once (i.e., there are no duplicates in the " \
+            "sequence). Each turn, the player enters a guess, and the " \
+            "program then reports how many of the player's guesses are correct " \
+            "(using exact matches, meaning the right rune in the right place).")
+    print()
+    print("The player has thirteen turns to guess the secret code. " \
+            "If they do, they win! Otherwise, the artifact explodes " \
+            "and the evil wizard wins!")
+
+
+main()
